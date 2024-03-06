@@ -36,4 +36,4 @@ label "clone resonance-dataserver"
 clone git@github.com:kmou424/resonance-dataserver.git resonance-dataserver || exit 1
 
 label "deploying apps..."
-docker compose -f ./docker-compose.yml up -d
+docker compose up -d
