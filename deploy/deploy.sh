@@ -16,6 +16,7 @@ function clone() {
         cd "$folder_name" || return 1
         if git pull; then
             print "pull successful"
+            cd ..
         else
             print "pull failed, try re-cloning"
             cd ..
