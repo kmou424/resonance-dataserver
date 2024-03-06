@@ -1,1 +1,4 @@
 .idea
+
+deploy/resonance-api
+deploy/resonance-dataserver
