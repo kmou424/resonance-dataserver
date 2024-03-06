@@ -9,3 +9,8 @@ type Good struct {
 	UpdateTime      string `json:"update_time"`
 	UpdateTimestamp int64  `json:"update_timestamp"`
 }
+
+type FullGood struct {
+	Id string `json:"id"`
+	Good
+}

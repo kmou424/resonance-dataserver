@@ -1,16 +1,16 @@
 package handlers
 
 import (
-	"fmt"
-	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/goutil/mathutil"
-	"github.com/kmou424/resonance-dataserver/cache"
 	"github.com/kmou424/resonance-dataserver/database/repositories"
+	"github.com/kmou424/resonance-dataserver/internal/kits/hashkit"
+	"github.com/kmou424/resonance-dataserver/internal/kits/rediskit"
 	"github.com/kmou424/resonance-dataserver/internal/kits/strkit"
 	"github.com/kmou424/resonance-dataserver/model"
 	"github.com/kmou424/resonance-dataserver/server/errors"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -21,37 +21,65 @@ var GetGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 		panic(errors.BadRequest("at least provide an argument: station or good"))
 	}
 
-	getValueFromRedis := func(key string, def any) any {
-		val, err := cache.Get(key)
-		if err != nil {
-			log.Warn(fmt.Sprintf("get entry of good info failed: [%s]", key))
-			return def
-		}
-		return val
-	}
-
-	getIntFromRedis := func(key string, def int) int {
-		value := getValueFromRedis(key, def)
-		return mathutil.MustInt(value)
-	}
-
-	var goods []*model.Good
+	var goods []model.Good
 
 	goodsMapper := repositories.GoodsMapper.Find(goodName, station)
 	for _, mapper := range goodsMapper {
-		goodId := mapper.ID
-		updateTimestamp := getValueFromRedis(strkit.Concat(goodId, "_update_time"), time.Now().Unix()+1000000)
-		updateTimestampInt := mathutil.MustInt64(updateTimestamp)
-		good := &model.Good{
-			Name:            mapper.Name,
-			Station:         mapper.Station,
-			Price:           getIntFromRedis(strkit.Concat(goodId, "_price"), -1),
-			NextTrend:       getIntFromRedis(strkit.Concat(goodId, "_next_trend"), 0),
-			UpdateTime:      time.Unix(updateTimestampInt, 0).Format(time.DateTime),
-			UpdateTimestamp: updateTimestampInt,
-		}
-		goods = append(goods, good)
+		goods = append(goods, *mapperToGood(&mapper))
 	}
 
 	c.JSON(http.StatusOK, goods)
+}
+
+var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
+	station := c.Query("station")
+	if station == "" {
+		panic(errors.BadRequest("you must provide station to query goods"))
+	}
+
+	existGoodsMapper := repositories.GoodsMapper.Find("", station)
+	existGoodsMap := make(map[string]model.GoodsMapper)
+	for _, mapper := range existGoodsMapper {
+		existGoodsMap[mapper.ID] = mapper
+	}
+
+	var fullGoods []model.FullGood
+	value := rediskit.GetValueFromRedis(strkit.Concat(hashkit.MD5(station), "_goods_list"), "")
+	if value != "" {
+		goodsIdList := mathutil.MustString(value)
+		for _, goodId := range strings.Split(goodsIdList, ",") {
+			var mapper model.GoodsMapper
+			if goodMapper, ok := existGoodsMap[goodId]; ok {
+				mapper = goodMapper
+			} else {
+				mapper = model.GoodsMapper{
+					ID:      goodId,
+					Name:    "Unknown",
+					Station: "Unknown",
+				}
+			}
+			fullGood := model.FullGood{
+				Id:   goodId,
+				Good: *mapperToGood(&mapper),
+			}
+			fullGoods = append(fullGoods, fullGood)
+		}
+	}
+
+	c.JSON(http.StatusOK, fullGoods)
+}
+
+func mapperToGood(mapper *model.GoodsMapper) *model.Good {
+	goodId := mapper.ID
+	updateTimestamp := rediskit.GetValueFromRedis(strkit.Concat(goodId, "_update_time"), time.Now().Unix()+1000000)
+	updateTimestampInt := mathutil.MustInt64(updateTimestamp)
+	good := &model.Good{
+		Name:            mapper.Name,
+		Station:         mapper.Station,
+		Price:           rediskit.GetIntFromRedis(strkit.Concat(goodId, "_price"), -1),
+		NextTrend:       rediskit.GetIntFromRedis(strkit.Concat(goodId, "_next_trend"), 0),
+		UpdateTime:      time.Unix(updateTimestampInt, 0).Format(time.DateTime),
+		UpdateTimestamp: updateTimestampInt,
+	}
+	return good
 }
