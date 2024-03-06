@@ -7,7 +7,7 @@ ENV GOPROXY https://goproxy.cn,direct
 COPY . /app
 
 RUN go mod download
-RUN go build -v=0 -a -trimpath -ldflags "-s -w -extldflags '-static'" -o server_bin ./cmd/server
+RUN CGO_ENABLED=0 go build -v=0 -a -trimpath -ldflags "-s -w -extldflags '-static'" -o server_bin ./cmd/server
 
 FROM scratch
 WORKDIR /app

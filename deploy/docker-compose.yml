@@ -1,7 +1,8 @@
 version: '3.8'
 services:
-  redis:
+  resonance-redis:
     image: redis
+    container_name: resonance-redis
     ports:
       - "6379:6379"
 
@@ -11,7 +12,7 @@ services:
       dockerfile: Dockerfile
     container_name: resonance-api
     environment:
-      - REDIS_ADDR=redis:6379
+      - REDIS_ADDR=resonance-redis:6379
 
   resonance-dataserver:
     build:
@@ -19,6 +20,6 @@ services:
       dockerfile: Dockerfile
     container_name: resonance-dataserver
     environment:
-      - REDIS_ADDR=redis:6379
+      - REDIS_ADDR=resonance-redis:6379
     ports:
       - "8080:8080"
