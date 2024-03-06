@@ -8,12 +8,8 @@ import (
 )
 
 func importData() {
-	content, err := mapperdata.Data.ReadFile("files/goods_cities_mapper.json")
-	if err != nil {
-		log.Fatal("can't read mapper data", "error", err)
-	}
 	var goodMappers []model.GoodsMapper
-	err = json.Unmarshal(content, &goodMappers)
+	err := json.Unmarshal(mapperdata.ReadGoodsCitiesMapper(), &goodMappers)
 	if err != nil {
 		log.Fatal("can't parse mapper data", "error", err)
 	}
