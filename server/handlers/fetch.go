@@ -67,7 +67,7 @@ var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 				mapper = model.GoodsMapper{
 					ID:      goodId,
 					Name:    "Unknown",
-					Station: "Unknown",
+					Station: station,
 				}
 			}
 			fullGood := model.FullGood{
