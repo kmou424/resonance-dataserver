@@ -3,8 +3,6 @@ services:
   resonance-redis:
     image: redis
     container_name: resonance-redis
-    ports:
-      - "6379:6379"
 
   resonance-api:
     build:
