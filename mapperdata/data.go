@@ -15,17 +15,33 @@ func ReadGoodsCitiesMapper() []byte {
 	if err != nil {
 		log.Fatal("can't read mapper data", "error", err)
 	}
+	return removeJsonComment(string(content))
+}
+
+func removeJsonComment(src string) []byte {
 	var sb strings.Builder
-	commentReg := regexp.MustCompile(`//.*`)
-	lines := strings.Split(string(content), "\n")
+	commentStartReg := regexp.MustCompile(`-.*->`)
+	commentEndReg := regexp.MustCompile(`<-.*-`)
+	lines := strings.Split(src, "\n")
 	for _, line := range lines {
-		result := commentReg.FindString(line)
+		commentStart := commentStartReg.FindString(line)
+		commentEnd := commentEndReg.FindString(line)
 		// filter comments
-		if result != "" {
+		if commentStart != "" || commentEnd != "" {
 			continue
 		}
 		sb.WriteString(line)
 		sb.WriteRune('\n')
 	}
-	return []byte(sb.String())
+	res := sb.String()
+
+	removeRedundantComma := func() {
+		reg := regexp.MustCompile(`}.*\n]`)
+		src := reg.FindString(res)
+		dst := strings.Replace(src, ",", "", 1)
+		res = strings.Replace(res, src, dst, 1)
+	}
+	removeRedundantComma()
+
+	return []byte(res)
 }
