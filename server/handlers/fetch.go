@@ -34,7 +34,15 @@ var GetGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 	station := c.Query("station")
 	if station == "" {
-		panic(errors.BadRequest("you must provide station to query goods"))
+		panic(errors.BadRequest(`you must provide "station" to query goods`))
+	}
+	show := c.Query("show")
+	switch show {
+	case "full":
+	case "unknown":
+		break
+	default:
+		panic(errors.BadRequest(`argument "show" is invalid`))
 	}
 
 	existGoodsMapper := repositories.GoodsMapper.Find("", station)
@@ -50,6 +58,10 @@ var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 		for _, goodId := range strings.Split(goodsIdList, ",") {
 			var mapper model.GoodsMapper
 			if goodMapper, ok := existGoodsMap[goodId]; ok {
+				// filter known goods
+				if show == "unknown" {
+					continue
+				}
 				mapper = goodMapper
 			} else {
 				mapper = model.GoodsMapper{
