@@ -2,3 +2,5 @@
 
 deploy/resonance-microservice
 deploy/resonance-dataserver
+
+mapperdata/files/*.json
