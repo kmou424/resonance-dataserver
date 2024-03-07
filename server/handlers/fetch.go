@@ -36,13 +36,14 @@ var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 	if station == "" {
 		panic(errors.BadRequest(`you must provide "station" to query goods`))
 	}
+
 	show := c.Query("show")
 	switch show {
 	case "full":
 	case "unknown":
 		break
 	default:
-		panic(errors.BadRequest(`argument "show" is invalid`))
+		show = "full"
 	}
 
 	existGoodsMapper := repositories.GoodsMapper.Find("", station)
