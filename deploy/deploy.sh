@@ -42,3 +42,5 @@ curl -L "https://raw.githubusercontent.com/kmou424/resonance-mapperdata/main/goo
 
 label "deploying apps..."
 docker compose up --force-recreate --build -d
+
+read -r -p "Press any key to continue..."
