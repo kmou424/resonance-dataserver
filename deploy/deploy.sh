@@ -30,8 +30,8 @@ function clone() {
 
 cd "$(dirname "$0")" || exit
 
-label "clone resonance-api"
-clone git@github.com:kmou424/resonance-api.git resonance-api || exit 1
+label "clone resonance-microservice"
+clone git@github.com:kmou424/resonance-microservice.git resonance-microservice || exit 1
 
 label "clone resonance-dataserver"
 clone git@github.com:kmou424/resonance-dataserver.git resonance-dataserver || exit 1

@@ -4,11 +4,11 @@ services:
     image: redis
     container_name: resonance-redis
 
-  resonance-api:
+  resonance-microservice:
     build:
-      context: ./resonance-api
+      context: ./resonance-microservice
       dockerfile: Dockerfile
-    container_name: resonance-api
+    container_name: resonance-microservice
     environment:
       - REDIS_ADDR=resonance-redis:6379
 
