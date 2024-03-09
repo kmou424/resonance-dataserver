@@ -36,10 +36,6 @@ clone git@github.com:kmou424/resonance-microservice.git resonance-microservice |
 label "clone resonance-dataserver"
 clone git@github.com:kmou424/resonance-dataserver.git resonance-dataserver || exit 1
 
-label "download resonance-mapperdata"
-curl -L "https://mirror.ghproxy.com/https://raw.githubusercontent.com/kmou424/resonance-resodata/main/goods_cities_mapper.json" \
- > resonance-dataserver/mapperdata/files/goods_cities_mapper.json || exit 1
-
 label "deploying apps..."
 docker compose up --force-recreate --build -d
 
