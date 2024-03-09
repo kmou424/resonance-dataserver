@@ -17,9 +17,6 @@ import (
 var GetGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 	station := c.Query("station")
 	goodName := c.Query("good")
-	if station == "" && goodName == "" {
-		panic(errors.BadRequest("at least provide an argument: station or good"))
-	}
 
 	var goods []model.Good
 
