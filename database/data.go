@@ -2,12 +2,16 @@ package database
 
 import (
 	"encoding/json"
+	"github.com/kmou424/resonance-dataserver/database/model"
 	"github.com/kmou424/resonance-dataserver/mapperdata"
-	"github.com/kmou424/resonance-dataserver/model"
 	"log"
 )
 
 func importData() {
+	importMapperData()
+}
+
+func importMapperData() {
 	var goodMappers []model.GoodsMapper
 	err := json.Unmarshal(mapperdata.ReadGoodsCitiesMapper(), &goodMappers)
 	if err != nil {

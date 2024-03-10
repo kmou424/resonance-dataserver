@@ -1,4 +1,4 @@
-package model
+package pojo
 
 type Good struct {
 	Name    string `json:"name"`

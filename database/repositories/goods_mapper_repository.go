@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/kmou424/resonance-dataserver/model"
+	"github.com/kmou424/resonance-dataserver/database/model"
 	"gorm.io/gorm"
 )
 

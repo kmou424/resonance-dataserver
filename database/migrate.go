@@ -3,8 +3,8 @@ package database
 import (
 	"fmt"
 	"github.com/charmbracelet/log"
+	"github.com/kmou424/resonance-dataserver/database/model"
 	"github.com/kmou424/resonance-dataserver/internal/types"
-	"github.com/kmou424/resonance-dataserver/model"
 )
 
 func migrate() {
