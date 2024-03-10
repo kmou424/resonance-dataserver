@@ -3,4 +3,4 @@
 deploy/resonance-microservice
 deploy/resonance-dataserver
 
-mapperdata/files/*.json
+database/data/files/goods_cities_mapper.json
