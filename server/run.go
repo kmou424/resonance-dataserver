@@ -2,11 +2,11 @@ package server
 
 import (
 	"fmt"
+	"github.com/charmbracelet/log"
 	"github.com/gookit/goutil/sysutil"
 	"github.com/kmou424/resonance-dataserver/server/engine"
 	"github.com/kmou424/resonance-dataserver/server/middlewares"
 	"github.com/kmou424/resonance-dataserver/server/routers"
-	"log"
 )
 
 func Run() {

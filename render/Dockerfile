@@ -19,7 +19,7 @@ RUN git clone git@github.com:kmou424/resonance-microservice.git /app/microservic
 
 RUN cd /app/dataserver && \
     curl -L "https://raw.githubusercontent.com/kmou424/resonance-resodata/main/goods_cities_mapper.json" \
-         > mapperdata/files/goods_cities_mapper.json && \
+         > database/data/files/goods_cities_mapper.json && \
     go mod download && \
     CGO_ENABLED=1 go build -v -a -trimpath -ldflags "-s -w -extldflags '-static'" -o server_bin ./cmd/server
 

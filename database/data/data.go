@@ -1,4 +1,4 @@
-package mapperdata
+package data
 
 import (
 	"embed"
@@ -14,6 +14,14 @@ func ReadGoodsCitiesMapper() []byte {
 	content, err := data.ReadFile("files/goods_cities_mapper.json")
 	if err != nil {
 		log.Fatal("can't read mapper data", "error", err)
+	}
+	return removeJsonComment(string(content))
+}
+
+func ReadAuthKeys() []byte {
+	content, err := data.ReadFile("files/auth_keys.json")
+	if err != nil {
+		log.Fatal("can't read auth keys data", "error", err)
 	}
 	return removeJsonComment(string(content))
 }

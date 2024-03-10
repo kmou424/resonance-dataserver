@@ -12,6 +12,7 @@ func migrate() {
 
 	targets := []types.Pair[any, string]{
 		{&model.GoodsMapper{}, model.GoodsMapperTable},
+		{&model.AuthKey{}, model.AuthKeyTable},
 	}
 
 	for _, obj := range targets {
