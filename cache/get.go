@@ -6,11 +6,11 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func Get(key string) (val any, err error) {
+func MGet(keys ...string) (vals []any, err error) {
 	ctx, _ := contextTimeout()
-	val, err = redisClient.Get(ctx, key).Result()
+	vals, err = redisClient.MGet(ctx, keys...).Result()
 	if err != nil && !errors.Is(err, redis.Nil) {
-		log.Error("get value from redis failed", "key", key, "error", err)
+		log.Error("get values from redis failed", "keys", keys, "error", err)
 	}
 	return
 }
