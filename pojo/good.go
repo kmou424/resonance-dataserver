@@ -1,9 +1,13 @@
 package pojo
 
-type Good struct {
-	Name    string `json:"name"`
-	Station string `json:"station"`
+import "github.com/kmou424/resonance-dataserver/pojo/common"
 
+type Good struct {
+	common.GoodBase
+	GoodExtra
+}
+
+type GoodExtra struct {
 	Price           int    `json:"price"`
 	NextTrend       int    `json:"next_trend"`
 	UpdateTime      string `json:"update_time"`
@@ -11,6 +15,6 @@ type Good struct {
 }
 
 type FullGood struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 	Good
 }

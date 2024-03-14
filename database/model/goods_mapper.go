@@ -1,9 +1,11 @@
 package model
 
+import "github.com/kmou424/resonance-dataserver/pojo/common"
+
 const GoodsMapperTable = "goods_mappers"
 
 type GoodsMapper struct {
-	ID      string `json:"id" gorm:"primarykey"`
-	Name    string `json:"name"`
-	Station string `json:"station"`
+	common.GoodBase
+
+	ID string `json:"id" gorm:"primarykey"`
 }

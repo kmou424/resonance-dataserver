@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/goutil/mathutil"
-	model2 "github.com/kmou424/resonance-dataserver/database/model"
+	"github.com/kmou424/resonance-dataserver/database/model"
 	"github.com/kmou424/resonance-dataserver/database/repositories"
 	"github.com/kmou424/resonance-dataserver/internal/kits/hashkit"
 	"github.com/kmou424/resonance-dataserver/internal/kits/rediskit"
@@ -45,7 +45,7 @@ var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 	}
 
 	existGoodsMapper := repositories.GoodsMapper.Find("", station)
-	existGoodsMap := make(map[string]model2.GoodsMapper)
+	existGoodsMap := make(map[string]model.GoodsMapper)
 	for _, mapper := range existGoodsMapper {
 		existGoodsMap[mapper.ID] = mapper
 	}
@@ -55,7 +55,7 @@ var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 	if value != "" {
 		goodsIdList := mathutil.MustString(value)
 		for _, goodId := range strings.Split(goodsIdList, ",") {
-			var mapper model2.GoodsMapper
+			var mapper model.GoodsMapper
 			if goodMapper, ok := existGoodsMap[goodId]; ok {
 				// filter known goods
 				if show == "unknown" {
@@ -63,14 +63,12 @@ var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 				}
 				mapper = goodMapper
 			} else {
-				mapper = model2.GoodsMapper{
-					ID:      goodId,
-					Name:    "Unknown",
-					Station: station,
+				mapper = model.GoodsMapper{
+					ID: goodId,
 				}
 			}
 			fullGood := pojo.FullGood{
-				Id:   goodId,
+				ID:   goodId,
 				Good: *mapperToGood(&mapper),
 			}
 			fullGoods = append(fullGoods, fullGood)
@@ -80,17 +78,18 @@ var GetFullGoodsInfo gin.HandlerFunc = func(c *gin.Context) {
 	c.JSON(http.StatusOK, fullGoods)
 }
 
-func mapperToGood(mapper *model2.GoodsMapper) *pojo.Good {
+func mapperToGood(mapper *model.GoodsMapper) *pojo.Good {
 	goodId := mapper.ID
 	updateTimestamp := rediskit.GetValueFromRedis(strkit.Concat(goodId, "_update_time"), time.Now().Unix()+1000000)
 	updateTimestampInt := mathutil.MustInt64(updateTimestamp)
 	good := &pojo.Good{
-		Name:            mapper.Name,
-		Station:         mapper.Station,
-		Price:           rediskit.GetIntFromRedis(strkit.Concat(goodId, "_price"), -1),
-		NextTrend:       rediskit.GetIntFromRedis(strkit.Concat(goodId, "_next_trend"), 0),
-		UpdateTime:      time.Unix(updateTimestampInt, 0).Format(time.DateTime),
-		UpdateTimestamp: updateTimestampInt,
+		GoodBase: mapper.GoodBase,
+		GoodExtra: pojo.GoodExtra{
+			Price:           rediskit.GetIntFromRedis(strkit.Concat(goodId, "_price"), -1),
+			NextTrend:       rediskit.GetIntFromRedis(strkit.Concat(goodId, "_next_trend"), 0),
+			UpdateTime:      time.Unix(updateTimestampInt, 0).Format(time.DateTime),
+			UpdateTimestamp: updateTimestampInt,
+		},
 	}
 	return good
 }
