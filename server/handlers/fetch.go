@@ -70,6 +70,7 @@ func walkGoodExtraByID(id string, walk func(pojo.GoodExtra)) {
 }
 
 func mapperToGood(mapper *model.GoodsMapper) (good *pojo.Good) {
+	mapper.GoodBase.ID = mapper.ID
 	walkGoodExtraByID(mapper.ID, func(extra pojo.GoodExtra) {
 		good = &pojo.Good{
 			GoodBase:  mapper.GoodBase,

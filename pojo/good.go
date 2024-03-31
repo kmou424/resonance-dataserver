@@ -13,8 +13,3 @@ type GoodExtra struct {
 	UpdateTime      string `json:"update_time"`
 	UpdateTimestamp int64  `json:"update_timestamp"`
 }
-
-type FullGood struct {
-	ID string `json:"id"`
-	Good
-}
