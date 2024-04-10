@@ -2,6 +2,8 @@ package database
 
 import (
 	"encoding/json"
+	"github.com/gookit/goutil/fsutil"
+	"github.com/kmou424/resonance-dataserver/cmd/cli"
 	"github.com/kmou424/resonance-dataserver/database/data"
 	"github.com/kmou424/resonance-dataserver/database/model"
 	"log"
@@ -27,7 +29,8 @@ func importMapperData() {
 
 func importAuthKeysData() {
 	var authKeys []model.AuthKey
-	err := json.Unmarshal(data.ReadAuthKeys(), &authKeys)
+	authKeysBytes := fsutil.ReadFile(cli.AuthKeysFile)
+	err := json.Unmarshal(authKeysBytes, &authKeys)
 	if err != nil {
 		log.Fatal("can't parse mapper data", "error", err)
 	}

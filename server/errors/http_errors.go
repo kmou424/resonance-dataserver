@@ -23,3 +23,17 @@ func Unauthorized(format string, args ...any) HttpError {
 		Error:      fmt.Errorf(format, args...),
 	}
 }
+
+func Forbidden(format string, args ...any) HttpError {
+	return HttpError{
+		StatusCode: http.StatusForbidden,
+		Error:      fmt.Errorf(format, args...),
+	}
+}
+
+func InternalServerError(format string, args ...any) HttpError {
+	return HttpError{
+		StatusCode: http.StatusInternalServerError,
+		Error:      fmt.Errorf(format, args...),
+	}
+}

@@ -15,4 +15,4 @@ RUN CGO_ENABLED=1 go build -v=0 -a -trimpath -ldflags "-s -w -extldflags '-stati
 FROM scratch
 WORKDIR /app
 COPY --from=builder /app/server_bin /app/server
-CMD ["/app/server"]
+CMD ["/app/server", "-auth-keys-file", "/data/auth_keys.json"]

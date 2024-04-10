@@ -10,4 +10,5 @@ var apiGroup *gin.RouterGroup
 func Register() {
 	apiGroup = engine.E.Group("/api")
 	registerFetchRouters()
+	registerAdminRouters()
 }

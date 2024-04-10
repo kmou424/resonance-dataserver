@@ -17,6 +17,8 @@ services:
       context: ./resonance-dataserver
       dockerfile: Dockerfile
     container_name: resonance-dataserver
+    volumes:
+      - /data/resodata/server:/data
     environment:
       - REDIS_ADDR=resonance-redis:6379
     ports:

@@ -5,6 +5,7 @@ go 1.22.0
 require (
 	github.com/charmbracelet/log v0.3.1
 	github.com/gin-gonic/gin v1.9.1
+	github.com/google/uuid v1.6.0
 	github.com/gookit/goutil v0.6.15
 	github.com/redis/go-redis/v9 v9.5.1
 	gorm.io/driver/sqlite v1.5.5

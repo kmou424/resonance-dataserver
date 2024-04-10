@@ -4,4 +4,5 @@ const AuthKeyTable = "auth_keys"
 
 type AuthKey struct {
 	UUID string `json:"uuid"`
+	User string `json:"user"`
 }
