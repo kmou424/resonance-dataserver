@@ -5,6 +5,8 @@ services:
     container_name: resonance-redis
 
   resonance-microservice:
+    depends_on:
+      - resonance-redis
     build:
       context: ./resonance-microservice
       dockerfile: Dockerfile
@@ -13,6 +15,8 @@ services:
       - REDIS_ADDR=resonance-redis:6379
 
   resonance-dataserver:
+    depends_on:
+      - resonance-microservice
     build:
       context: ./resonance-dataserver
       dockerfile: Dockerfile
