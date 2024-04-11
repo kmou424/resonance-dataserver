@@ -39,4 +39,7 @@ clone git@github.com:kmou424/resonance-dataserver.git resonance-dataserver || ex
 label "deploying apps..."
 docker compose up --force-recreate --build -d
 
+label "cleaning old build cache..."
+docker builder prune --force --filter "until=24h"
+
 read -r -p "Press any key to continue..."
