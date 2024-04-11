@@ -3,6 +3,11 @@ services:
   resonance-redis:
     image: redis
     container_name: resonance-redis
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "16m"
+        max-file: "4"
 
   resonance-microservice:
     depends_on:
@@ -13,6 +18,11 @@ services:
     container_name: resonance-microservice
     environment:
       - REDIS_ADDR=resonance-redis:6379
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "16m"
+        max-file: "4"
 
   resonance-dataserver:
     depends_on:
@@ -27,3 +37,8 @@ services:
       - REDIS_ADDR=resonance-redis:6379
     ports:
       - "8080:8080"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "16m"
+        max-file: "4"
