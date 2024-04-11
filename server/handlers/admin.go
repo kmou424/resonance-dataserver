@@ -25,15 +25,6 @@ func queryUser(c *gin.Context) string {
 	return user
 }
 
-func requireNewUUID(c *gin.Context) string {
-	id, err := uuid.NewUUID()
-	if err != nil {
-		c.Abort()
-		panic(errors.InternalServerError(fmt.Sprintf("error generating uuid: %s", err)))
-	}
-	return id.String()
-}
-
 var AddUUID gin.HandlerFunc = func(c *gin.Context) {
 	user := queryUser(c)
 
@@ -48,7 +39,7 @@ var AddUUID gin.HandlerFunc = func(c *gin.Context) {
 	}
 
 	authKey := model.AuthKey{
-		UUID: requireNewUUID(c),
+		UUID: uuid.New().String(),
 		User: user,
 	}
 
@@ -67,7 +58,7 @@ var UpdateUUID gin.HandlerFunc = func(c *gin.Context) {
 		panic(errors.BadRequest(fmt.Sprintf("invalid user")))
 	}
 
-	authKey.UUID = requireNewUUID(c)
+	authKey.UUID = uuid.New().String()
 
 	repositories.AuthKey.UpdateByUser(authKey)
 	syncAuthKeysToFilesystem(c)
