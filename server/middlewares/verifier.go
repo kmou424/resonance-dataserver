@@ -10,6 +10,10 @@ import (
 
 func getAuthVerifier() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if strings.Contains(c.FullPath(), "/api/health") {
+			c.Next()
+			return
+		}
 		uuid := c.Query("uuid")
 		verified := repositories.AuthKey.HasUUID(uuid)
 		if !verified {
