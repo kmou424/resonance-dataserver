@@ -10,7 +10,7 @@ import (
 
 func getAuthVerifier() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if strings.Contains(c.FullPath(), "/api/health") {
+		if strings.HasSuffix(c.FullPath(), "/api/health") {
 			c.Next()
 			return
 		}
@@ -27,7 +27,7 @@ func getAuthVerifier() gin.HandlerFunc {
 
 func getAdminVerifier() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if strings.Contains(c.FullPath(), "/api/admin") {
+		if strings.HasSuffix(c.FullPath(), "/api/admin") {
 			if uuid := c.Query("uuid"); !repositories.AuthKey.IsAdmin(uuid) {
 				c.Abort()
 				panic(errors.Forbidden(fmt.Sprintf("permission denied")))
