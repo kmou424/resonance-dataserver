@@ -2,6 +2,7 @@ version: '3.8'
 services:
   resonance-redis:
     image: redis
+    restart: always
     container_name: resonance-redis
     logging:
       driver: "json-file"
@@ -16,6 +17,7 @@ services:
       context: ./resonance-microservice
       dockerfile: Dockerfile
     container_name: resonance-microservice
+    restart: always
     environment:
       - REDIS_ADDR=resonance-redis:6379
     logging:
@@ -31,12 +33,13 @@ services:
       context: ./resonance-dataserver
       dockerfile: Dockerfile
     container_name: resonance-dataserver
+    restart: always
     volumes:
       - /data/resodata/server:/data
     environment:
       - REDIS_ADDR=resonance-redis:6379
     ports:
-      - "8080:8080"
+      - "18081:8080"
     logging:
       driver: "json-file"
       options:
